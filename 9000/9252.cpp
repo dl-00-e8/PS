@@ -6,8 +6,8 @@ using namespace std;
 
 string a, b;
 vector<char> answer;
-int dx[] = {-1, 0};
-int dy[] = {0, -1};
+// int dx[] = {-1, 0, -1};
+// int dy[] = {0, -1, -1};
 int dp[1001][1001];
 void find(int x, int y);
 void solve();
@@ -26,23 +26,33 @@ int main() {
     return 0;
 }
 
-void find(int x, int y) {
-    int now = dp[x][y];
-    bool check = true;
+// void find(int x, int y) {
+//     int mx, my;
+//     bool check = true;
 
-    if(now == 0) {
-        return ;
-    }
+//     if(dp[x][y] == 0) {
+//         return ;
+//     }
 
-    if(x < 0 || y < 0) {
-        return ;
-    }
+//     if(x < 0 || y < 0) {
+//         return ;
+//     }
 
-    for(int i = 0; i < 2; i++) {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-    }
-}
+//     for(int i = 0; i < 2; i++) {
+//         int nx = x + dx[i];
+//         int ny = y + dy[i];
+
+//         if(dp[nx][ny] == dp[x][y]) {
+//             check = false;
+//             find(nx, ny);
+//         }
+//     }
+
+//     if(check) {
+//         answer.push_back(a[x - 1]);
+//         find(x - 1, y - 1);
+//     }
+// }
 
 void solve() {
     int result = 0;
@@ -60,17 +70,26 @@ void solve() {
         }
     }
 
-    for(int i = 1; i < a.size() + 1; i++) {
-        for(int j = 1; j < b.size() + 1; j++) {
-            cout << dp[i][j] << " ";
+    // find(a.size(), b.size());
+
+    int x = a.size();
+    int y = b.size();
+    while(dp[x][y] != 0) {
+        if(dp[x][y] == dp[x - 1][y]) {
+            x--;
         }
-        cout << endl;
+        else if(dp[x][y] == dp[x][y - 1]) {
+            y--;
+        }
+        else {
+            answer.push_back(a[x - 1]);
+            x--;
+            y--;
+        }
     }
 
-    find(a.size(), b.size());
-
     cout << result << endl;
-    for(int i = 0; i < answer.size(); i++) {
+    for(int i = answer.size() - 1; i >= 0; i--) {
         cout << answer[i];
     }
     cout << endl;
