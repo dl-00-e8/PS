@@ -8,7 +8,6 @@ int n, answer;
 int ining[51][10];
 int line[10];
 bool visited[10];
-void setting(int cnt);
 int play();
 void solve();
 
@@ -29,27 +28,21 @@ int main() {
     return 0;
 }
 
-void setting(int cnt) {
-    if(cnt == 9) {
-        play();
-    }
-}
-
 int play() {
-    int now, out, result; // now = ¶óÀÎ¾÷ idx
+    int now, out, result; // now = ë¼ì¸ì—… idx
     bool base[4];
     
-    // ÀÌ´×
+    // ì´ë‹
     now = 1;
     result = 0;
     for(int i = 1; i < n + 1; i++) {
-        // ÁÖÀÚ ÃÊ±âÈ­
+        // ì£¼ì ì´ˆê¸°í™”
         memset(base, 0, sizeof(base));
 
-        // 3 ¾Æ¿ôÄ«¿îÆ® Ã¼Å©
+        // 3 ì•„ì›ƒì¹´ìš´íŠ¸ ì²´í¬
         out = 0;
         while(out < 3) {
-            // ÇöÀç ¼±¼ö ¹øÈ£
+            // í˜„ì¬ ì„ ìˆ˜ ë²ˆí˜¸
             int hitter = line[now];
 
             if(ining[i][hitter] == 0) {
@@ -94,38 +87,39 @@ int play() {
             else if(ining[i][hitter] == 3) {
                 int cnt = 0;
 
-                // ÁÖÀÚ ¼ö È®ÀÎ
+                // ì£¼ì ìˆ˜ í™•ì¸
                 for(int j = 3; j  > 0; j--) {
                     if(base[j]) {
                         cnt++;
+
+                        // ì£¼ì ì´ˆê¸°í™”
+                        base[j] = 0;
                     }
                 }
 
-                // Á¡¼ö Áõ°¡
+                // ì ìˆ˜ ì¦ê°€
                 result += cnt;
 
-                // 3·ç ÁÖÀÚ¸¸ Á¸Àç
-                memset(base, 0, sizeof(base));
                 base[3] = true;
             }
             else if(ining[i][hitter] == 4) {
                 int cnt = 1;
 
-                // ÁÖÀÚ ¼ö È®ÀÎ
+                // ì£¼ì ìˆ˜ í™•ì¸
                 for(int j = 3; j  > 0; j--) {
                     if(base[j]) {
                         cnt++;
+
+                        // ì£¼ì ì´ˆê¸°í™”
+                        base[j] = 0;
                     }
                 }
 
-                // Á¡¼ö Áõ°¡
+                // ì ìˆ˜ ì¦ê°€
                 result += cnt;
-
-                // ÁÖÀÚ ÃÊ±âÈ­
-                memset(base, 0, sizeof(base));
             }
 
-            // ´ÙÀ½ Å¸ÀÚ
+            // ë‹¤ìŒ íƒ€ì
             now++;
             if(now > 9) {
                 now = 1;
@@ -139,16 +133,18 @@ int play() {
 void solve() {
     answer = 0;
 
-    // for(int i = 1; i < 10; i++) {
-    //     if(i == 4) {
-    //         continue;
-    //     }
+    // default line-up
+    for(int i = 1; i < 10; i++) {
+        line[i] = i;
+    }
 
-    //     memset(line, 0, sizeof(line));
-        
-    //     line[1] = 4;
-    //     setting(2);
-    // }
+    // solution
+    do {
+        if(line[4] != 1) {
+            continue;
+        }
+        answer = max(answer, play());
+    }while(next_permutation(line + 1, line + 10));
 
     cout << answer << endl;
 }
