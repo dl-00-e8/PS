@@ -2,10 +2,10 @@ import java.io.*;
 import java.util.*;
 
 class Pair {
-    int first;
+    long first;
     int second;
 
-    public Pair(int first, int second) {
+    public Pair(long first, int second) {
         this.first = first;
         this.second = second;
     }
@@ -13,7 +13,7 @@ class Pair {
 }
 
 public class Main {
-    public static Integer MAX_INT = 1000000000;
+    public static Long MAX_NUM = 10000000001L;
 
     public static void main(String[] args) throws Exception {
         var br = new BufferedReader(new InputStreamReader(System.in));
@@ -40,32 +40,36 @@ public class Main {
             int b = Integer.parseInt(inputThird[1]);
             int t = Integer.parseInt(inputThird[2]);
 
-            graph[a].add(new Pair(b, t));
-            graph[b].add(new Pair(a, t));
+            graph[a].add(new Pair(t, b));
+            graph[b].add(new Pair(t, a));
         }
 
-        int[] distance = new int[N];
-        Arrays.fill(distance, MAX_INT);
+        long[] distance = new long[N];
+        Arrays.fill(distance, MAX_NUM);
 
-        PriorityQueue<Pair> pq = new PriorityQueue<>(Comparator.comparingInt(p -> p.first));
+        PriorityQueue<Pair> pq = new PriorityQueue<>(Comparator.comparingLong(p -> p.first));
 
         pq.add(new Pair(0, 0));
         distance[0] = 0;
         while(!pq.isEmpty()) {
             Pair now = pq.poll();
 
+            if(now.first > distance[now.second]) {
+                continue;
+            }
+
             for(Pair next: graph[now.second]) {
-                if((vision[next.first] == 0 || next.first == N - 1) && now.first + next.second < distance[next.first]) {
-                    distance[next.first] = now.first + next.second;
-                    pq.add(new Pair(distance[next.first], next.first));
+                if((vision[next.second] == 0 || next.second == N - 1) && now.first + next.first < distance[next.second]) {
+                    distance[next.second] = now.first + next.first;
+                    pq.add(new Pair(distance[next.second], next.second));
                 }
             }
         }
 
-        if(distance[N - 1] != MAX_INT) {
-            bw.write(distance[N - 1]);
+        if(distance[N - 1] != MAX_NUM) {
+            bw.write(String.valueOf(distance[N - 1]));
         } else {
-            bw.write(-1);
+            bw.write(String.valueOf(-1));
         }
 
         bw.flush();
